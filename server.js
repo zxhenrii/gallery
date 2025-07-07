@@ -82,13 +82,15 @@ app.post('/upload', authRequired, upload.single('image'), async (req, res) => {
 
   const convertToJpeg = ['.jfif', '.webp', '.bmp', '.tiff', '.svg'];
 
-  if (convertToJpeg.includes(ext)) {
-    const nameWithoutExt = path.basename(file.filename, ext);
-    finalFilename = `${nameWithoutExt}.jpeg`;
-    const outputPath = path.join(__dirname, 'uploads', finalFilename);
+  try {
+    if (convertToJpeg.includes(ext)) {
+      const nameWithoutExt = path.basename(file.filename, ext);
+      finalFilename = `${nameWithoutExt}-${Date.now()}.jpeg`;
+      const outputPath = path.join(__dirname, 'uploads', finalFilename);
 
-    try {
       await sharp(inputPath).jpeg({ quality: 90 }).toFile(outputPath);
+
+      // Deleta o arquivo original após 10s
       setTimeout(async () => {
         try {
           await fs.promises.access(inputPath);
@@ -98,25 +100,31 @@ app.post('/upload', authRequired, upload.single('image'), async (req, res) => {
           console.error(`Erro ao remover após 10s: ${err.message}`);
         }
       }, 10000);
-    } catch (err) {
-      console.error(`Erro ao converter/remover o arquivo: ${err.message}`);
     }
+
+    // Verifica se o arquivo convertido realmente existe
+    const finalPath = path.join(__dirname, 'uploads', finalFilename);
+    await fs.promises.access(finalPath);
+
+    // Salva no JSON
+    const imagePath = `/uploads/${finalFilename}`;
+    const uploadedBy = req.session.user;
+
+    const imagesPath = path.join(__dirname, 'images.json');
+    let images = [];
+
+    if (fs.existsSync(imagesPath)) {
+      images = JSON.parse(fs.readFileSync(imagesPath));
+    }
+
+    images.push({ url: imagePath, uploadedBy });
+    fs.writeFileSync(imagesPath, JSON.stringify(images, null, 2));
+
+    res.redirect('/gallery');
+  } catch (err) {
+    console.error("Erro ao processar imagem:", err);
+    res.status(500).send("Erro ao processar imagem.");
   }
-
-  const imagePath = `/uploads/${finalFilename}`;
-  const uploadedBy = req.session.user;
-
-  const imagesPath = path.join(__dirname, 'images.json');
-  let images = [];
-
-  if (fs.existsSync(imagesPath)) {
-    images = JSON.parse(fs.readFileSync(imagesPath));
-  }
-
-  images.push({ url: imagePath, uploadedBy });
-  fs.writeFileSync(imagesPath, JSON.stringify(images, null, 2));
-
-  res.redirect('/gallery');
 });
 
 app.get('/gallery', (req, res) => {
