@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeoGallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #0f0f0f, #1a1a1a);
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffff;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 2rem;
+      text-align: center;
+      background: #0f0f0f;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .buttons a {
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px solid #00ffff;
+      color: #00ffff;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      transition: 0.3s ease;
+    }
+
+    .buttons a:hover {
+      background: #00ffff;
+      color: #0f0f0f;
+      box-shadow: 0 0 20px #00ffff;
+    }
+
+    .hero {
+      text-align: center;
+      margin-top: 4rem;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .hero img {
+      max-width: 80%;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00ffff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🚀 NeoGallery</h1>
+    <p>Upload e visualize imagens com estilo futurista</p>
+  </header>
+
+  <div class="buttons">
+    <a href="/upload">📤 Enviar Imagem</a>
+    <a href="/gallery">🖼️ Ver Galeria</a>
+  </div>
+
+  <div class="hero">
+    <img src="/uploads/1751839341949-cyberpunk.jfif" alt="Cyberpunk Preview">
+  </div>
+</body>
+</html>

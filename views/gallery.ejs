@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Galeria</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #0b0014, #140022);
+      color: #eee;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      color: #d8baff;
+      text-shadow: 0 0 20px #b661ff;
+    }
+
+    .image-container {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .image-box {
+      display: none;
+      transition: opacity 0.4s ease-in-out;
+      position: relative;
+    }
+
+    .image-box.active {
+      display: block;
+    }
+
+    .image-box img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #a550ff90;
+      cursor: pointer;
+    }
+
+    .author {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #ccc;
+    }
+
+    .nav-buttons {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .nav-buttons button {
+      background: #8c00ff;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 15px #8c00ff88;
+      transition: background 0.3s;
+    }
+
+    .nav-buttons button:hover {
+      background: #a100ff;
+    }
+
+    .upload-link {
+      display: inline-block;
+      margin-top: 2rem;
+      background: #00ffcc;
+      color: black;
+      padding: 0.7rem 1.4rem;
+      font-weight: bold;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 0 15px #00ffcc88;
+      transition: background 0.3s;
+    }
+
+    .upload-link:hover {
+      background: #00e6b8;
+    }
+
+    .copy-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: #00ffcc;
+      color: #000;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffcc88;
+      display: none;
+      z-index: 10;
+    }
+
+    .copy-btn.show {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Galeria de imagens</h1>
+
+  <% if (images.length === 0) { %>
+    <p>Nenhuma imagem disponível.</p>
+  <% } else { %>
+    <div class="image-container">
+      <% images.forEach((image, index) => { %>
+        <div class="image-box <%= index === 0 ? 'active' : '' %>">
+          <img src="<%= image.url %>" alt="Imagem" onclick="toggleCopyButton('<%= index %>')" />
+          <div class="author">Enviado por: <%= image.uploadedBy %></div>
+          <button class="copy-btn" onclick="copyImageUrl('<%= image.url %>')">📋 Copiar URL</button>
+        </div>
+      <% }); %>
+
+      <div class="nav-buttons">
+        <button onclick="prevImage()">◀ Anterior</button>
+        <button onclick="nextImage()">Próxima ▶</button>
+      </div>
+    </div>
+  <% } %>
+
+  <a class="upload-link" href="/upload">Enviar nova imagem</a>
+
+  <script>
+    let current = 0;
+    const boxes = document.querySelectorAll('.image-box');
+
+    function showImage(index) {
+      boxes[current].classList.remove('active');
+      current = (index + boxes.length) % boxes.length;
+      boxes[current].classList.add('active');
+    }
+
+    function nextImage() {
+      showImage(current + 1);
+    }
+
+    function prevImage() {
+      showImage(current - 1);
+    }
+
+    function toggleCopyButton(index) {
+        boxes.forEach((box) => {
+        const btn = box.querySelector('.copy-btn');
+        if (btn) btn.classList.remove('show');
+      });
+
+      const box = boxes[parseInt(index)];
+      const button = box.querySelector('.copy-btn');
+      if (button) button.classList.add('show');
+    }
+
+   function copyImageUrl(url) {
+    const fullUrl = window.location.origin + url;
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      alert('URL copiada para a área de transferência:\n' + fullUrl);
+    }).catch(err => {
+      alert('Erro ao copiar URL: ' + err);
+    });
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - NeoGallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(145deg, #0f0f0f, #1a1a1a);
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .login-box {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border: 1px solid #00ffff;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00ffff;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #1f1f1f;
+      color: #00ffff;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #00ffff;
+      border: none;
+      border-radius: 8px;
+      color: #0f0f0f;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #00cccc;
+    }
+
+    .error {
+      color: #ff4d4d;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <form class="login-box" method="POST" action="/login">
+    <h2>🔐 Login</h2>
+    <input type="text" name="username" placeholder="Usuário" required />
+    <input type="password" name="password" placeholder="Senha" required />
+    <button type="submit">Entrar</button>
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
+  </form>
+</body>
+</html>

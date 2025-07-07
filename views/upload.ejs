@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Enviar imagem</title>
+  <style>
+    body {
+      background-color: #0a0a0a;
+      color: #eee;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    form {
+      display: inline-block;
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+    }
+
+    .file-label {
+      background: linear-gradient(135deg, #8f00ff, #00fff2);
+      color: #fff;
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00fff2aa;
+      transition: all 0.3s ease;
+    }
+
+    .file-label:hover {
+      background: #00e6ff;
+      color: #000;
+      box-shadow: 0 0 20px #00e6ff;
+    }
+
+    #preview {
+      max-width: 200px;
+      margin: 10px auto;
+      display: none;
+      border-radius: 8px;
+    }
+
+    .futuristic-button {
+      background: linear-gradient(135deg, #00ffe7, #0088ff);
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 8px #00ffe7;
+    }
+
+    .futuristic-button:hover {
+      background: #00bbff;
+      color: white;
+      box-shadow: 0 0 20px #00ffe7;
+    }
+
+    a {
+      display: block;
+      margin-top: 20px;
+      color: #00bbff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Envie uma imagem</h1>
+
+  <form action="/upload" method="POST" enctype="multipart/form-data">
+    <div class="file-input-wrapper">
+      <label class="file-label" for="file">📂 Escolher imagem</label>
+      <input type="file" name="image" id="file" accept="image/*" required />
+      <h4>Suporta apenas .png, .jpeg, .webp & .gif</h4>
+    </div>
+
+    <img id="preview" />
+    <br />
+
+    <button type="submit" class="futuristic-button">🚀 Enviar</button>
+  </form>
+
+  <a href="/gallery">📷 Ver galeria</a>
+
+  <script>
+    const fileInput = document.getElementById('file');
+    const preview = document.getElementById('preview');
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          preview.src = reader.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
